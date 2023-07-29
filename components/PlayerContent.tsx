@@ -21,6 +21,7 @@ interface PlayerContentProps {
 const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     const player = usePlayer();
     const [volume, setVolume] = useState(1);
+    const [oldVolume, setOldVolume] = useState(volume);
     const [isPlaying, setIsPlaying] = useState(false);
 
     const Icon = isPlaying ? BsPauseFill : BsPlayFill;
@@ -72,7 +73,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
     useEffect(() => {
         sound?.play();
         return () => {
-            sound?.onload();
+            sound?.unload();
         }
     }, [sound])
 
@@ -86,11 +87,15 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
 
     const toggleMute = () => {
         if (volume === 0) {
-            setVolume(1);
+            setVolume(oldVolume);
         } else {
             setVolume(0);
         }
     }
+
+    useEffect(() => {
+        setVolume(oldVolume);
+    }, [oldVolume])
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 h-full">
@@ -120,7 +125,7 @@ const PlayerContent: React.FC<PlayerContentProps> = ({ song, songUrl }) => {
             <div className="hidden w-full md:flex justify-end pr-2">
                 <div className="flex items-center gap-x-2 w-[120px]">
                     <VolumeIcon onClick={toggleMute} className="cursor-pointer" size={34} />
-                    <Slider value={volume} onChange={(v) => setVolume(v)} />
+                    <Slider value={volume} onChange={(v) => setOldVolume(v)} />
                 </div>
             </div>
         </div>
