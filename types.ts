@@ -28,7 +28,7 @@ export interface Price {
     unit_amount?: number;
     currency?: string;
     type?:Stripe.Price.Type;
-    interva?:Stripe.Price.Recurring.Interval;
+    interval?:Stripe.Price.Recurring.Interval;
     interval_count?: number;
     trial_period_days?: number | null;
     metadata?:Stripe.Metadata;
